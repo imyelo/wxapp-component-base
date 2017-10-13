@@ -1,7 +1,7 @@
 /**
  * 组件基类
  */
- 
+
 const Base = require('./base.js');
 const Emitter = require('./utils/emitter.js');
 
@@ -59,7 +59,7 @@ class Component extends Base {
      * @param target {Object} 组件挂载的 page 对象
      * @param ns {String} 组件挂载在页面 data 的对应路径，例如 'top.nav'
      */
-    constructor(target, ns) {
+    constructor(target, ns, data = {}) {
         super(target);
 
         this.target = target;
@@ -71,7 +71,7 @@ class Component extends Base {
         if(typeof target.setData === 'function') this.page = target;
 
 
-        this._mergeDefaultData();
+        this._mergeDefaultData(data);
         this._initComponents();
 
         this._mergeLifeCircle();
@@ -104,8 +104,8 @@ class Component extends Base {
     /**
      * 合并组件 data
      */
-    _mergeDefaultData() {
-        let defaults = this.defaultData();
+    _mergeDefaultData(data) {
+        let defaults = Object.assign({}, this.defaultData(), data);
 
         for(let key in defaults) {
             if(typeof this.data[key] == "undefined") this.data[key] = defaults[key];

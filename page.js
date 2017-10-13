@@ -48,8 +48,14 @@ class JDPage extends Base {
 
         this.components = {};
 
-        for(let component in components) {
-            this.components[component] = new components[component](this.obj, component);
+        for(let name in components) {
+            let component = components[name]
+            let data = {}
+            if (typeof component === 'object' && typeof component.component === 'function') {
+              data = component.data || {}
+              component = component.component
+            }
+            this.components[name] = new component(this.obj, name, data);
         }
 
         this.obj.components = this.components;
